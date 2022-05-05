@@ -5,7 +5,6 @@ import './login.css'
 class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.state = props.state
         this.changeState = props.changeState
         this.handlerLogin = this.handlerLogin.bind(this);
     }
@@ -18,15 +17,22 @@ class Login extends React.Component {
         }
         const config = {
             method: 'post',
-            url: 'https://chat.emillieerafael.com/api/v1/users/token',
+            url: 'http://localhost:8000/api/v1/users/token',
             headers: {
                 'Content-Type': 'application/json'
             },
             data
         };
-        const token = await axios(config)
-        console.log(token)
-        this.changeState(true)
+        try {
+            const credentials = await axios(config)
+            this.changeState(true, credentials.data.token, credentials.data.email)
+            document.getElementById('inputUser').value = ''
+            document.getElementById('inputPassword').value = ''
+
+
+        } catch {
+            window.alert('Credenciais incorretas')
+        }
     }
     render() {
         return (
@@ -41,7 +47,7 @@ class Login extends React.Component {
                         <label htmlFor="inputPassword" className="form-label">Password</label>
                         <input type="password" className="form-control" id="inputPassword" />
                     </div>
-                    <button type="button" className="btn btn-primary" onClick={this.handlerLogin}>Fazer login</button>
+                    <button type="button" className="btn btn-primary" onClick={this.handlerLogin} style={{ "backgroundColor": "blueviolet", "border": "black" }}>Fazer login</button>
                 </form>
             </div>
         )

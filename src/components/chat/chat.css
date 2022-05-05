@@ -1,0 +1,36 @@
+h1 {
+  font-size: 20px;
+  color: blueviolet;
+}
+.chat {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.chatTextArea {
+  display: flex;
+  align-items: top;
+  justify-content: left;
+  padding: 10px;
+  width: auto;
+  height: 200px;
+  border-style: groove;
+  border-width: 2px;
+  overflow-y: scroll;
+  resize: vertical;
+}
+.chatInput {
+  margin-top: 10px;
+}
+.chatInputRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.chatInputDropDown {
+  width: auto;
+  border-color: blueviolet;
+  background-color: white;
+}
+.chatInputButton {
+  width: 20%;
+}

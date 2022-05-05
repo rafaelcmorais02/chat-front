@@ -1,6 +1,6 @@
 import React from "react";
 import Login from './components/login/Login'
-
+import Chat from "./components/chat/Chat";
 class App extends React.Component {
     constructor(props) {
         super(props)
@@ -10,16 +10,18 @@ class App extends React.Component {
         this.renderChange = this.renderChange.bind(this);
     }
 
-    renderChange(render) {
-        return this.setState({ render })
+    renderChange(render, token, user) {
+        return this.setState({
+            render,
+            token,
+            user,
+        })
     }
     renderChat() {
         if (this.state.render) {
             return (
                 <div>
-                    <h1>
-                        opa
-                    </h1>
+                    <Chat user={this.state.user} token={this.state.token} />
                 </div>
             )
         }
