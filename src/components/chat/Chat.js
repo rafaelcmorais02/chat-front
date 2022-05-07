@@ -8,42 +8,110 @@ class Chat extends React.Component {
         this.userSender = props.user
         this.token = props.token
         this.state = {}
+        this.handlerSend = this.handlerSend.bind(this)
+    }
+
+    renderMessage(message, user) {
+        return (
+            `${(user || { user_name: this.userSender }).user_name} - ${message.message}`
+        )
     }
 
     async componentDidMount() {
-        const config = {
-            method: 'get',
-            url: 'http://localhost:8000/api/v1/users/all',
-            headers: {
-                'Authorization': `Bearer ${this.token}`
-            }
-        };
-        const userListReciever = await axios(config)
-        this.setState({
-            userListReciever: userListReciever.data.data
-        })
-        console.log(this.state.userListReciever)
+        setInterval(async () => {
+            let config = {
+                method: 'get',
+                url: 'http://localhost:8000/api/v1/messages/all',
+                headers: {
+                    'Authorization': `Bearer ${this.token}`
+                }
+            };
+            const messages = await axios(config)
+            config = {
+                method: 'get',
+                url: 'http://localhost:8000/api/v1/users/all',
+                headers: {
+                    'Authorization': `Bearer ${this.token}`
+                }
+            };
+            const userList = await axios(config)
+            this.setState({
+                userList: userList.data.data,
+                messages: messages.data.data
+            })
+        }, 1000)
     }
 
+    async handlerSend() {
+        if (document.getElementById('userToSend').value && document.getElementById('userToSend').value) {
+
+            const data = {
+                message: document.getElementById('message').value,
+                user_receiver: document.getElementById('userToSend').value
+            };
+            const config = {
+                method: 'post',
+                url: 'http://localhost:8000/api/v1/messages/register',
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+            try {
+                if (data.message && data.user_receiver)
+                    await axios(config)
+                document.getElementById('message').value = ''
+            } catch (error) {
+                window.alert('Erro no envio da mensagem')
+            }
+        } else {
+            window.alert('Escolha um destinatário e então envie uma mensagem')
+        }
+    }
+
+    listCssClass(userToSend, message) {
+        if (message.user_sender === userToSend)
+            return 'chatListReciever'
+        else
+            return 'chatListSender'
+    }
     render() {
         return (
             <div className="chat">
-                <h1>Chat Demo! Bem vindo {this.userSender}</h1>
+                <h1>Remetente: {this.userSender}</h1>
+                <hr />
+                <div className="chatUserToSend">
+                    <h2>Destinatário: </h2>
+                    <select className="chatInputDropDown" id="userToSend">
+                        <option defaultValue>...</option>
+                        {(this.state.userList || []).map(x => {
+                            return (
+                                <option key={x.id} value={x.id}>{x.user_name}</option>
+                            )
+                        })}
+                    </select>
+                </div>
                 <div className="chatTextArea">
-                    <h1>teste</h1>
+                    <ul className="chatList">
+                        {(this.state.messages || []).map((message, index) => {
+                            const user = (this.state.userList || []).find(x => x.id === message.user_sender)
+                            const userToSend = parseInt(document.getElementById('userToSend').value)
+                            if ((message.user_sender) === userToSend || (message.user_receiver) === userToSend) {
+                                return (
+                                    <li className={this.listCssClass(userToSend, message)} key={index}>{
+                                        this.renderMessage(message, user)
+                                    }</li>
+                                )
+                            }
+                            return null
+                        })}
+                    </ul>
                 </div>
                 <div className="chatInput">
                     <div className="chatInputRow">
-                        <select className="chatInputDropDown" id="user_receiver">
-                            <option defaultValue>...</option>
-                            {(this.state.userListReciever || []).map(x => {
-                                return (
-                                    <option key={x.id} value={x.id}>{x.user_name}</option>
-                                )
-                            })}
-                        </select>
-                        <input type="text" className="form-control" aria-label="Text input with dropdown button" />
-                        <button type="button" className="btn btn-primary chatInputButton" onClick={this.handlerLogin} style={{ "backgroundColor": "blueviolet", "border": "black" }}>Enviar</button>
+                        <input type="text" id="message" className="form-control" aria-label="Text input with dropdown button" />
+                        <button type="button" className="btn btn-primary chatInputButton" onClick={this.handlerSend} style={{ "backgroundColor": "blueviolet", "border": "black" }}>Enviar</button>
                     </div>
                 </div>
             </div>
