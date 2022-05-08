@@ -8,7 +8,7 @@ import Register from "./components/register/Register"
 const webRoutes = () => {
     return (
         <BrowserRouter>
-            <Routes>
+            <Routes >
                 <Route element={<Login />} path="/" exact />
                 <Route element={<Register />} path="/register" exact />
             </Routes>

@@ -79,7 +79,7 @@ class Chat extends React.Component {
     render() {
         return (
             <div className="chat">
-                <h1>Remetente: {this.userSender}</h1>
+                <h2>Remetente: {this.userSender}</h2>
                 <hr />
                 <div className="chatUserToSend">
                     <h2>Destinatário: </h2>
