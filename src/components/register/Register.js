@@ -28,7 +28,7 @@ class Register extends React.Component {
             })
             const config = {
                 method: 'post',
-                url: 'http://localhost:8000/api/v1/users/register',
+                url: 'https://chatapi.portfolio-rafael.com/api/v1/users/register',
                 headers: {
                     'Content-Type': 'application/json'
                 },

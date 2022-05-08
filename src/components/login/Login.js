@@ -48,7 +48,7 @@ class Login extends React.Component {
         }
         const config = {
             method: 'post',
-            url: 'http://localhost:8000/api/v1/users/token',
+            url: 'https://chatapi.portfolio-rafael.com/api/v1/users/token',
             headers: {
                 'Content-Type': 'application/json'
             },

@@ -21,7 +21,7 @@ class Chat extends React.Component {
         setInterval(async () => {
             let config = {
                 method: 'get',
-                url: 'http://localhost:8000/api/v1/messages/all',
+                url: 'https://chatapi.portfolio-rafael.com/api/v1/messages/all',
                 headers: {
                     'Authorization': `Bearer ${this.token}`
                 }
@@ -29,7 +29,7 @@ class Chat extends React.Component {
             const messages = await axios(config)
             config = {
                 method: 'get',
-                url: 'http://localhost:8000/api/v1/users/all',
+                url: 'https://chatapi.portfolio-rafael.com/api/v1/users/all',
                 headers: {
                     'Authorization': `Bearer ${this.token}`
                 }
@@ -51,7 +51,7 @@ class Chat extends React.Component {
             };
             const config = {
                 method: 'post',
-                url: 'http://localhost:8000/api/v1/messages/register',
+                url: 'https://chatapi.portfolio-rafael.com/api/v1/messages/register',
                 headers: {
                     'Authorization': `Bearer ${this.token}`,
                     'Content-Type': 'application/json'
