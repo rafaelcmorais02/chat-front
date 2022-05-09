@@ -41,6 +41,10 @@ class Register extends React.Component {
                 document.getElementById('lastName').value = ''
                 document.getElementById('password2').value = ''
                 document.getElementById('passwordValidator').value = ''
+                localStorage.setItem('authorization', JSON.stringify({
+                    token: null,
+                    user: null,
+                }))
                 this.props.navigation('/', {
                     state: {
                         userName: user_name,

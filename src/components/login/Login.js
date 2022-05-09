@@ -11,20 +11,22 @@ class Login extends React.Component {
         }
         this.handlerLogin = this.handlerLogin.bind(this);
         this.handleRegister = this.handleRegister.bind(this)
+        this.handleLogout = this.handleLogout.bind(this)
     }
     componentDidMount() {
+        const authorization = JSON.parse(localStorage.getItem('authorization'))
+        if ((authorization || {}).token && authorization.user) {
+            this.setState({
+                render: true,
+                token: authorization.token,
+                user: authorization.user,
+            })
+        }
         if (this.props.data) {
             document.getElementById('inputUser').value = (this.props.data.state || {}).userName || ''
             document.getElementById('inputPassword').value = (this.props.data.state || {}).userPassword || ''
         }
 
-    }
-    changeState(render, token, user) {
-        return this.setState({
-            render,
-            token,
-            user,
-        })
     }
     renderChat() {
         if (this.state.render) {
@@ -33,13 +35,34 @@ class Login extends React.Component {
                     <Chat user={this.state.user} token={this.state.token} />
                 </div>
             )
+        } else {
+            return (
+                <div>
+                </div>
+            )
         }
     }
 
     handleRegister() {
         this.props.navigation('/register')
     }
+
+    handleLogout() {
+        this.setState({
+            render: false,
+            token: '',
+            user: '',
+        })
+        localStorage.setItem('authorization', JSON.stringify({
+            token: null,
+            user: null,
+        }))
+    }
+
     async handlerLogin() {
+        this.setState({
+            render: false
+        })
         const user = document.getElementById('inputUser').value
         const password = document.getElementById('inputPassword').value
         const data = {
@@ -56,11 +79,17 @@ class Login extends React.Component {
         };
         try {
             const credentials = await axios(config)
-            this.changeState(true, credentials.data.token, credentials.data.email)
+            this.setState({
+                render: true,
+                token: credentials.data.token,
+                user: credentials.data.email,
+            })
+            localStorage.setItem('authorization', JSON.stringify({
+                token: credentials.data.token,
+                user: credentials.data.email,
+            }))
             document.getElementById('inputUser').value = ''
             document.getElementById('inputPassword').value = ''
-
-
         } catch {
             window.alert('Credenciais incorretas')
         }
@@ -79,7 +108,8 @@ class Login extends React.Component {
                             <label htmlFor="inputPassword" className="form-label">Password</label>
                             <input type="password" className="form-control" id="inputPassword" />
                         </div>
-                        <button type="button" className="btn btn-primary" onClick={this.handlerLogin} style={{ "backgroundColor": "blueviolet", "border": "black" }}>Fazer login</button>
+                        <button type="button" className="btn btn-primary" onClick={this.handlerLogin} style={{ "backgroundColor": "blueviolet", "border": "black" }}>LogIn</button>
+                        <button type="button" className="btn btn-primary" onClick={this.handleLogout} style={{ "backgroundColor": "blueviolet", "border": "black", "marginLeft": "10px" }}>LogOut</button>
                         <button type="button" className="btn btn-primary" onClick={this.handleRegister} style={{ "backgroundColor": "blueviolet", "border": "black", "marginLeft": "10px" }}>Cadastrar</button>
                     </form>
                 </div>
