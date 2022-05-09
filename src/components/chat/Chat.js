@@ -82,7 +82,7 @@ class Chat extends React.Component {
                 <h2>{this.userSender}</h2>
                 <hr />
                 <div className="chatUserToSend">
-                    <h2>Falar com: </h2>
+                    <h2>Conversar com: </h2>
                     <select className="chatInputDropDown" id="userToSend">
                         <option defaultValue>...</option>
                         {(this.state.userList || []).map(x => {

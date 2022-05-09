@@ -1,15 +1,15 @@
 import React from "react";
-import './Repo.css'
+import './repo.css'
 
 class Repo extends React.Component {
     render() {
         return (
-            <div className="Repo">
+            <div className="repo">
                 <h1>
                     Chat demo!
                 </h1>
-                <h2>Repositório front-end:</h2>
-                <h2>Repositório back-end:</h2>
+                <a href="https://github.com/rafaelcmorais02/chat-front">Repositório front-end</a>
+                <a href="https://github.com/rafaelcmorais02/chat-server">Repositório back-end</a>
             </div>
         )
     }

@@ -1,4 +1,4 @@
-h2 {
+a {
   font-size: 20px;
   color: blueviolet;
   display: flex;
@@ -14,6 +14,6 @@ h1 {
   justify-content: center;
   margin-right: 25px;
 }
-.Repo {
-  margin-top: 10px;
+.repo {
+  margin-top: 30px;
 }

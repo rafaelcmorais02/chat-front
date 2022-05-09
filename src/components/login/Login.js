@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import Chat from '../chat/Chat'
+import Repo from '../repo/Repo'
 import { useLocation, useNavigate } from "react-router-dom";
 import './login.css'
 class Login extends React.Component {
@@ -102,6 +103,8 @@ class Login extends React.Component {
     render() {
         return (
             <div>
+                <Repo />
+                <hr />
                 <div className="login">
                     <form>
                         <div className="mb-3">
