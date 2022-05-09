@@ -15,12 +15,17 @@ class Login extends React.Component {
     }
     componentDidMount() {
         const authorization = JSON.parse(localStorage.getItem('authorization'))
-        if ((authorization || {}).token && authorization.user) {
-            this.setState({
-                render: true,
-                token: authorization.token,
-                user: authorization.user,
-            })
+        if ((authorization || {}).token && authorization.user && authorization.expiration) {
+            const expiration = new Date(authorization.expiration)
+            if (expiration > new Date()) {
+                this.setState({
+                    render: true,
+                    token: authorization.token,
+                    user: authorization.user,
+                })
+            } else {
+                localStorage.setItem('authorization', JSON.stringify({}))
+            }
         }
         if (this.props.data) {
             document.getElementById('inputUser').value = (this.props.data.state || {}).userName || ''
@@ -53,10 +58,7 @@ class Login extends React.Component {
             token: '',
             user: '',
         })
-        localStorage.setItem('authorization', JSON.stringify({
-            token: null,
-            user: null,
-        }))
+        localStorage.setItem('authorization', JSON.stringify({}))
     }
 
     async handlerLogin() {
@@ -84,9 +86,12 @@ class Login extends React.Component {
                 token: credentials.data.token,
                 user: credentials.data.email,
             })
+            const now = new Date()
+            const expiration = now.setDate(now.getDate() + 1)
             localStorage.setItem('authorization', JSON.stringify({
                 token: credentials.data.token,
                 user: credentials.data.email,
+                expiration: expiration
             }))
             document.getElementById('inputUser').value = ''
             document.getElementById('inputPassword').value = ''
